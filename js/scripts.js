@@ -7,6 +7,7 @@ import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 
 
 
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -70,48 +71,36 @@ mesh.material.wireframe = true;
 
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+document.addEventListener('click', function() {
+    if (audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+            console.log('AudioContext resumed successfully');
+        });
+    }
+});
+
 const listener = new THREE.AudioListener();
 camera.add(listener);
 
 const sound = new THREE.Audio(listener);
-const audioElement = document.getElementById('audioElement');
+sound.hasPlaybackControl = true;
 
-// Wait for user interaction to resume the AudioContext
-document.body.addEventListener('click', function () {
-  if (audioContext.state === 'suspended') {
-    audioContext.resume();
-  }
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load('Beats.mp3', function (buffer) {
+    sound.setBuffer(buffer);
+    sound.setLoop(false);
+    sound.setVolume(0.5)
 
-  sound.setMediaElementSource(audioElement);
-
-  // Play the audio only after the user has interacted with the page
-  if (audioElement.paused) {
-    audioElement.play().catch(function (error) {
-      console.log("Error while playing the audio:", error);
+    document.getElementById('playButton').addEventListener('click', function () {
+        audioContext.resume().then(() => {
+            sound.play();
+        });
     });
-  }
-})
-
-// let audioContext;
-// let audioElement = new Audio('Beats.mp3');  // Create an audio element directly
-// audioElement.loop = true;  // Optional: set loop if needed
-
-// document.getElementById('playButton').addEventListener('click', function() {
-//   if (!audioContext) {
-//     audioContext = new (window.AudioContext || window.webkitAudioContext)();
-//   }
-
-//   // Ensure audioContext is resumed after a user gesture
-//   audioContext.resume().then(function() {
-//     console.log('AudioContext resumed');
-//     audioElement.play();  // Start the audio
-//   });
-// });
-
+});
 
 
 const analyser = new THREE.AudioAnalyser(sound, 32);
-
 const gui = new GUI(); // Create a new GUI instance
 
 // Create the UI to control colors
@@ -172,14 +161,12 @@ window.addEventListener('resize', function () {
   bloomComposer.setSize(window.innerWidth, window.innerHeight);
 });
 
-document.addEventListener('DOMContentLoaded', function() {
 const audioElement = document.getElementById('audioElement');
-sound.setMediaElementSource(audioElement);
+//sound.setMediaElementSource(audioElement);
 
-window.addEventListener('click', function () {
-  audioElement.play();
-});
-});
+// window.addEventListener('click', function () {
+//   audioElement.play();
+// });
 
 
 // Define the lyrics
