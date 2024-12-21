@@ -196,6 +196,23 @@
     </script>
     <script src="./js/scripts.js" type="module"></script>
     <audio id="audioElement" src="Beats.mp3"></audio>
+    <button id="play-button">Play Audio</button>
+
+    <script>
+        const playButton = document.getElementById('play-button');
+        const audioElement = document.getElementById('audioElement');
+
+        playButton.addEventListener('click', () => {
+            audioElement.play()
+                .then(() => {
+                    console.log('Audio started successfully!');
+                    playButton.style.display = 'none'; 
+                })
+                .catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+        });
+    </script>
 
 </body>
 </html>
