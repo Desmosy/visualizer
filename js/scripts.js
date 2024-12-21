@@ -5,6 +5,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 
+
+
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -72,12 +74,16 @@ camera.add(listener);
 const sound = new THREE.Audio(listener);
 
 const audioLoader = new THREE.AudioLoader();
-audioLoader.load('etta.mp3', function (buffer) {
-  sound.setBuffer(buffer);
-  window.addEventListener('click', function () {
-    sound.play();
-  });
+audioLoader.load('Beats.mp3', function (buffer) {
+    sound.setBuffer(buffer);
+
+    document.getElementById('playButton').addEventListener('click', function () {
+        audioContext.resume().then(() => {
+            sound.play();
+        });
+    });
 });
+
 
 const analyser = new THREE.AudioAnalyser(sound, 32);
 
@@ -115,6 +121,10 @@ document.addEventListener('mousemove', function (e) {
   mouseX = (e.clientX - windowHalfX) / 100;
   mouseY = (e.clientY - windowHalfY) / 100;
 });
+
+
+
+
 
 const clock = new THREE.Clock();
 function animate() {
