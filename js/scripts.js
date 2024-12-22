@@ -68,10 +68,16 @@ const mat = new THREE.ShaderMaterial({
   fragmentShader: document.getElementById('fragmentshader').textContent,
 });
 
-const geo = new THREE.TorusGeometry(2, 3, 8, 100);
+const isMobile = window.innerWidth<=400;
+const geo = new THREE.TorusGeometry(isMobile? 1: 2, 3, 8, 100);
 const mesh = new THREE.Mesh(geo, mat);
 scene.add(mesh);
 mesh.material.wireframe = true;
+
+
+// camera.fov = isMobile ? 45 : 75;  // Smaller FOV for mobile
+// camera.updateProjectionMatrix();
+
 
 // Audio setup
 let audioContext;
@@ -219,6 +225,13 @@ window.addEventListener('resize', function() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   bloomComposer.setSize(window.innerWidth, window.innerHeight);
+
+  if (window.innerWidth <= 400) {
+    mesh.scale.set(0.5, 0.5, 0.5);  // Scale down geometry for mobile
+  } else {
+    mesh.scale.set(1, 1, 1);  // Default size for desktop
+  }
+
 });
 
 // Handle audio ending
