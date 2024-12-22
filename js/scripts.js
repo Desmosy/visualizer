@@ -68,7 +68,7 @@ const mat = new THREE.ShaderMaterial({
   fragmentShader: document.getElementById('fragmentshader').textContent,
 });
 
-const isMobile = window.innerWidth<=400;
+const isMobile = window.innerWidth<=700;
 const geo = new THREE.TorusGeometry(isMobile? 1: 2, 3, 8, 100);
 const mesh = new THREE.Mesh(geo, mat);
 scene.add(mesh);
@@ -226,7 +226,7 @@ window.addEventListener('resize', function() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   bloomComposer.setSize(window.innerWidth, window.innerHeight);
 
-  if (window.innerWidth <= 400) {
+  if (window.innerWidth <= 700) {
     mesh.scale.set(0.5, 0.5, 0.5);  // Scale down geometry for mobile
   } else {
     mesh.scale.set(1, 1, 1);  // Default size for desktop
